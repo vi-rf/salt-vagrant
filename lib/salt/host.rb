@@ -7,7 +7,7 @@ module Salt
     attr_reader :name
     attr_accessor :master, :keypath, :attrib
 
-    @@defaults = {keypath: "keys/%s" }
+    @@defaults = {keypath: "keys" }
     def self.defaults
       @@defaults
     end
@@ -18,9 +18,7 @@ module Salt
       @role_config = role_config
       
       # The pattern
-      path = @@defaults[:keypath]
-      # instantiate
-      @keypath = path % [ @name ]
+      @keypath = @@defaults[:keypath]
 
       @attrib = { } # attributes hash
     end

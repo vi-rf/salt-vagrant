@@ -34,8 +34,8 @@ RSpec.describe Salt::Host do
     describe "#keygen" do
       it "creates a key from default path" do
         expect{ @obj.keygen }.to_not raise_error(Exception)
-        expect(File).to exist("keys/#{@name}/#{@name}.pub")
-        expect(File).to exist("keys/#{@name}/#{@name}.pem")
+        expect(File).to exist("keys/#{@name}.pub")
+        expect(File).to exist("keys/#{@name}.pem")
       end
       
       it "creates a key from a non-default path" do
@@ -48,20 +48,20 @@ RSpec.describe Salt::Host do
     end
     describe "#pub_key" do
       it "reports public key location" do
-        @obj.keypath = 'keys/myName'
-        expect( @obj.pub_key ).to eql("keys/myName/myName.pub")
+        @obj.keypath = 'keys'
+        expect( @obj.pub_key ).to eql("keys/myName.pub")
       end
     end
     describe "#pem_key" do
       it "reports private key location" do
-        @obj.keypath = 'keys/myName'
-        expect( @obj.pem_key ).to eql("keys/myName/myName.pem")
+        @obj.keypath = 'keys'
+        expect( @obj.pem_key ).to eql("keys/myName.pem")
       end
       
     end
     #cleanup
     after(:all) do
-      ["keys/myName", "tmp"].each do |p|
+      ["keys", "tmp"].each do |p|
         ["pub", "pem"].each do |s|
           File.delete("#{p}/myName.#{s}") if File.exist?("#{p}/myName.#{s}")
         end
