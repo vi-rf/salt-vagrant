@@ -1,6 +1,5 @@
 require 'fileutils'
 require 'openssl'
-require 'byebug'
 
 # class to hide some of the configuration stuff
 module Salt
