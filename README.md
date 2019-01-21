@@ -1,8 +1,6 @@
 # Salt::Host
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/salt/host`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Salt::Host is a set of classes to aid in using Salt as a configurator in Vagrant.  Though salt is a built-in configurator, using it is very messy, involving repeated code, blocks of assignments and configuration that is so very not DRY.  These classes are an attempt, albeit poor and in process, to clean up the use of salt in vagrant.  
 
 ## Installation
 
