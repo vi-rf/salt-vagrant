@@ -1,5 +1,6 @@
 # class to create salt roles
-require_relative 'salt/host'
+require 'salt'
+
 class SaltFactory
   def initialize(info)
     @info = info
