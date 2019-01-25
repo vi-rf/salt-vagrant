@@ -14,7 +14,7 @@ RSpec.describe Salt::Master do
     @obj = Salt::Master.new(@name, @info, @role_config)
   end
   it "has a version number" do
-    expect(Salt::Host::VERSION).not_to be nil
+    expect(Salt::VERSION).not_to be nil
   end
 
   describe "#new" do

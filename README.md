@@ -1,10 +1,31 @@
 # Salt::Host
 
-Salt::Host is a set of classes to aid in using Salt as a configurator in Vagrant.  Though salt is a built-in configurator, using it is very messy, involving repeated code, blocks of assignments and configuration that is so very not DRY.  These classes are an attempt, albeit poor and in process, to clean up the use of salt in vagrant.  
+Salt::Host is a set of classes to aid in using Salt as a configurator in Vagrant.  Though salt is a built-in configurator, using it is very messy, involving repeated code, blocks of assignments and configuration that is so very not DRY.  These classes are an attempt, albeit poor and in process, to clean up the use of salt in vagrant.  Since Vagrant is packaged as a stand-alone distribution, with an embedded ruby executable, the normal ruby way of distributing / installing / using gems won't work.  The Vagrant way of extending is to create a plugin, but that seems like overkill at this point.  
 
 ## Installation
 
-Add this line to your application's Gemfile:
+1. From the top level directory of your vagrant setup (the directory with the Vagrantfile), check out this code
+`git clone git@github.com:petermeulbroek/salt-vagrant.git`
+1. IF you want to run tests, you'll have to have a working ruby environment with bundler and rspec.  If not, skip the next steps
+  1. Install dependent Gems
+  `bundle install --path vendor`
+   Note that this puts all needed gems in a vendor subdirectory, to avoid clashes
+  2.  Run tests
+  `rake spec`
+1.  The classs are usuable as is, but vagrant needs to be made aware of them.  You'll need to edit your Vagrantfile.  Insert the following near/at the top of the Vagrantfile
+```
+require 'yaml'
+
+$LOAD_PATH.push File.expand_path('salt-vagrant/lib')
+require  'salt/saltfactory'
+
+hconfig = YAML.load_file("saltconfig.yml")
+
+# hosts is a hash of Salt host classes
+hosts = SaltFactory.new(hconfig).create
+```
+  This adds 
+
 
 ```ruby
 gem 'salt-host'
