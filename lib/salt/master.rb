@@ -21,8 +21,10 @@ module Salt
     end
     
     def addMasterConfig(salt)
-      mconf = File.read(@role_config['master_config']).gsub(/\n\s*/, " ")
-      salt.master_json_config = eval("\"" + mconf.gsub(/"/, '\"') + "\"")
+      if @role_config.has_key?('master_config')
+        mconf = File.read(@role_config['master_config']).gsub(/\n\s*/, " ")
+        salt.master_json_config = eval("\"" + mconf.gsub(/"/, '\"') + "\"")
+      end
     end
     
   end
