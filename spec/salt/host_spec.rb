@@ -1,4 +1,4 @@
-require "salt/host"
+require "salt"
 require "byebug"
 
 RSpec.describe Salt::Host do
@@ -10,12 +10,15 @@ RSpec.describe Salt::Host do
     @obj = Salt::Host.new(@name, @info, @role_config)
   end
   it "has a version number" do
-    expect(Salt::Host::VERSION).not_to be nil
+    expect(Salt::VERSION).not_to be nil
   end
 
   describe "#new" do
     it "can create an object" do
       expect( @obj ).to be_kind_of(Salt::Host)
+    end
+    it "raises an error without an ip" do
+      expect{Salt::Host.new("foo", {})}.to raise_error(ArgumentError)
     end
   end
   

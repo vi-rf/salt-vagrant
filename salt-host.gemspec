@@ -1,11 +1,11 @@
-
 lib = File.expand_path("../lib", __FILE__)
+STDERR.puts lib
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "salt/host/version"
+require 'salt'
 
 Gem::Specification.new do |spec|
   spec.name          = "salt-host"
-  spec.version       = Salt::Host::VERSION
+  spec.version       = Salt::VERSION
   spec.authors       = ["Peter Meulbroek"]
   spec.email         = ["pmeulbroek@riskfocus.com"]
 

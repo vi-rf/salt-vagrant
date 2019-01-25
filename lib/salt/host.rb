@@ -12,11 +12,14 @@ module Salt
       @@defaults
     end
     
-    def initialize(name, info, role_config)
+    def initialize(name, info, role_config={})
       @name = name
       @info = info
       @role_config = role_config
-      
+
+      if !@info.has_key?("ip")
+        raise ArgumentError.new("Host info hash must list ip")
+      end
       # The pattern
       @keypath = @@defaults[:keypath]
 
