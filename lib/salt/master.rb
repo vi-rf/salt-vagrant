@@ -31,3 +31,4 @@ module Salt
   
 end
 
+# Copyright (C) 2019 by Risk Focus Inc.  All rights reserved

@@ -4,51 +4,62 @@ Salt::Host is a set of classes to aid in using Salt as a configurator in Vagrant
 
 ## Installation
 
-1. From the top level directory of your vagrant setup (the directory with the Vagrantfile), check out this code
-`git clone git@github.com:petermeulbroek/salt-vagrant.git`
-1. IF you want to run tests, you'll have to have a working ruby environment with bundler and rspec.  If not, skip the next steps
-  1. Install dependent Gems
-  `bundle install --path vendor`
-   Note that this puts all needed gems in a vendor subdirectory, to avoid clashes
-  2.  Run tests
+From the top level directory of your vagrant setup (the directory with the Vagrantfile), check out this code
+ ```
+git clone git@github.com:petermeulbroek/salt-vagrant.git
+```
+
+IF you want to run tests, you'll have to have a working ruby environment with bundler and rspec.  If not, skip the next steps
+
+### Testing the classes
+	a. Install dependent Gems
+   `bundle install --path vendor`
+   *Note that this puts all needed gems in a vendor subdirectory, to avoid clashes*
+  b.  Run tests
   `rake spec`
-1.  The classs are usuable as is, but vagrant needs to be made aware of them.  You'll need to edit your Vagrantfile.  Insert the following near/at the top of the Vagrantfile
+## Usage  
+  ### Vagrantfile Updates
+The classes are useable as-is, but vagrant needs to be made aware of them.  You'll need to update your Vagrantfile to use them.  
+1.  The libraries need to be loaded into the Vagrant interpreter.  This is accomplished by the lines 
 ```
 require 'yaml'
 
 $LOAD_PATH.push File.expand_path('salt-vagrant/lib')
-require  'salt/saltfactory'
-
+require  'salt'
+```
+2.  The configuration objects are created by the Salt::Factory object, based on what is specified in a yaml configuration file.   This file is loaded by including:
+```
 hconfig = YAML.load_file("saltconfig.yml")
 
 # hosts is a hash of Salt host classes
-hosts = SaltFactory.new(hconfig).create
+hosts = Salt::Factory.new(hconfig).create
 ```
-  This adds 
-
-
-```ruby
-gem 'salt-host'
+3. hosts are created (with proper configuration) with the remainder of the example configuration file.
+### Configuration File
+The host layout is specified in a file, saltconfig.yml (name defined in the Vagrantfile).  This file may contain several sections:
+* **defaults**: The default values for memory and cpu for all hosts can be set here.  E.g., 
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install salt-host
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
+defaults:
+   cpus: 2
+   memory: 1024   # in MB
+ ```
+* **hosts**:  This sets the number and salt topology for hosts.  Each hosts entry must contain role, ip and salt master for the host.  Currently, all IPs are static.  Default values can be overwritten on a per-host basis.  
+```
+hosts:
+   minion1:
+      role: minion
+      ip: 10.1.0.10
+      master: master
+   master:
+      role: master
+      ip: 10.1.0.1
+      master: master
+      minions:
+         - minion1
+```
+ 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/petermeulbroek/salt-host.
+
+Copyright (C) 2019 by Risk Focus, Inc
