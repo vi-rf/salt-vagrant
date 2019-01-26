@@ -1,0 +1,44 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+require 'yaml'
+
+$LOAD_PATH.push File.expand_path('salt-vagrant/lib')
+require  'salt'
+
+hconfig = YAML.load_file("saltconfig.yml")
+
+# hosts is a hash of Salt host classes
+hosts = Salt::Factory.new(hconfig).create
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+
+  ##############
+  ##  Configure
+  ##############
+  hosts.each do |n, h|
+    config.vm.define h.name.to_sym  do |host|
+      host.vm.host_name = "#{h.name}.local"
+      host.vm.network "private_network", ip: h.ip
+
+       # there should be a better way for this
+       if h.role == 'master'
+        host.vm.provision :shell, inline: <<~HEREDOC
+          for r in salt pillar formulas reactor saltee; do 
+            if [ -d /vagrant/saltstack/$r ]; then
+              ln -sf /vagrant/saltstack/$r /srv/$r;
+            fi;
+          done
+         HEREDOC
+      end
+      
+      host.vm.provision :salt do |salt|
+           # points to the ship master      
+        salt.minion_json_config = %Q({"id": "#{h.name}", "master": "#{h.master.ip}" })
+        
+        h.setDefaults(salt)
+      end
+
+    end
+  end
+end
