@@ -1,12 +1,11 @@
 hosts:
   minion1:
     role: minion
-    ip: 192.168.33.15
+    ip: 10.0.44.10
     master: master
-
   master: 
     role: master
-    ip: 192.168.33.10
+    ip: 10.0.44.2
     memory: 1536
     cpus: 2
     master: master
