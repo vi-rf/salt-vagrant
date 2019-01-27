@@ -23,13 +23,10 @@ module Salt
         hostlist[n] = _createhost(n, conf)
       end
       
-      # now that all objects are created, set their masters and syndics
+      # now that all objects are created, set their masters
       hostlist.each do |n, v|
-        v.master = hostlist[@info['hosts'][n]['master']]
+         v.master = hostlist[ v["master"] ]
         
-        if v.respond_to?(:syndic_master)
-          v.syndic_master = hostlist[@info['hosts'][n]['syndic_master']]
-        end
       end
       
       return hostlist

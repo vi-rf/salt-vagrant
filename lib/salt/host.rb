@@ -5,7 +5,7 @@ require 'openssl'
 module Salt
   class Host < Hash
     attr_reader :name
-    attr_accessor :master, :keypath
+    attr_accessor :keypath
 
     @@defaults = {keypath: "keys" }
     def self.defaults

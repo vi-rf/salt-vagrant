@@ -2,6 +2,7 @@ require 'salt/host'
 
 module Salt
   class Minion < Host
+    attr_accessor :master
   end
 end
 

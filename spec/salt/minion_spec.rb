@@ -3,7 +3,7 @@ require 'salt/minion'
 RSpec.describe Salt::Minion do
   before :each do
     @name = "myName"
-    @info = {"ip" => "199.199.199.199", "grains" => "tmp/myName"}
+    @info = {"ip" => "199.199.199.199", "grains" => "tmp/myName", "master" => 'master'}
     
     @obj = Salt::Minion.new(@name, @info)
   end
