@@ -43,7 +43,7 @@ defaults:
    cpus: 2
    memory: 1024   # in MB
  ```
-* **hosts**:  This sets the number and salt topology for hosts.  Each hosts entry must contain role, ip and salt master for the host.  Currently, all IPs are static.  Default values can be overwritten on a per-host basis.  
+* **hosts**:  This sets the number and salt topology for hosts.  Each hosts entry must contain role, ip and salt master for each host.  The name for each created host is the dictionary key (minion1, master in the following example).  Currently, all IPs are static.  Default values from the defaults section can be overwritten on a per-host basis.  
 ```
 hosts:
    minion1:
@@ -57,7 +57,8 @@ hosts:
       minions:
          - minion1
 ```
- 
+
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/petermeulbroek/salt-host.

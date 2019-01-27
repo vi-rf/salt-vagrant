@@ -4,11 +4,11 @@ RSpec.describe Salt::Syndic do
   before :each do
     @name = "myName"
     @info = {"ip" => "199.199.199.199",
-             "minions" => []
+             "minions" => [],
+             "grains" => "tmp/myName"
             }
-    @role_config = {"grains" => "tmp/myName"}
     
-    @obj = Salt::Syndic.new(@name, @info, @role_config)
+    @obj = Salt::Syndic.new(@name, @info)
   end
   it "has a version number" do
     expect(Salt::VERSION).not_to be nil

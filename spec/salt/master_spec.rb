@@ -4,14 +4,11 @@ RSpec.describe Salt::Master do
   before :each do
     @name = "myName"
     @info = {"ip" => "199.199.199.199",
-             "minions" => ['minion1', 'minion2', 'minion3']
+             "minions" => ['minion1', 'minion2', 'minion3'],
+              "master_config" => "tmpfile"
             }
     
-    @role_config = {
-      "master_config" => "tmpfile"
-    }
-    
-    @obj = Salt::Master.new(@name, @info, @role_config)
+    @obj = Salt::Master.new(@name, @info)
   end
   it "has a version number" do
     expect(Salt::VERSION).not_to be nil

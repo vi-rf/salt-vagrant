@@ -3,27 +3,25 @@ require 'openssl'
 
 # class to hide some of the configuration stuff
 module Salt
-  class Host
+  class Host < Hash
     attr_reader :name
-    attr_accessor :master, :keypath, :attrib
+    attr_accessor :master, :keypath
 
     @@defaults = {keypath: "keys" }
     def self.defaults
       @@defaults
     end
-    
-    def initialize(name, info, role_config={})
-      @name = name
-      @info = info
-      @role_config = role_config
 
-      if !@info.has_key?("ip")
-        raise ArgumentError.new("Host info hash must list ip")
-      end
+    # create the class with a name and a list of hashes
+    def initialize(name, info)
+      @name = name
+
+      # this creates the configuration
+      self.merge!(info)
+
       # The pattern
       @keypath = @@defaults[:keypath]
 
-      @attrib = { } # attributes hash
     end
 
     def role
@@ -31,7 +29,7 @@ module Salt
     end
 
     def ip
-      @info["ip"]
+      self["ip"]
     end
     
     def pub_key
@@ -60,7 +58,7 @@ module Salt
       
       # write the keys
       self.keygen
-      salt.grains_config = @role_config["grains"]
+      salt.grains_config = self["grains"]
 
       salt.minion_pub = pub_key
       salt.minion_key = pem_key      

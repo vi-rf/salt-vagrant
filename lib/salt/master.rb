@@ -5,7 +5,7 @@ module Salt
     # create the list of minion keys that the master should be seeded with
     def minionList
       keylist = {}
-      @info['minions'].each do |h|
+      self['minions'].each do |h|
         keylist[h] = @keypath + "/#{h}.pub"
       end
       return keylist
@@ -21,8 +21,8 @@ module Salt
     end
     
     def addMasterConfig(salt)
-      if @role_config.has_key?('master_config')
-        mconf = File.read(@role_config['master_config']).gsub(/\n\s*/, " ")
+      if self.has_key?('master_config')
+        mconf = File.read(self['master_config']).gsub(/\n\s*/, " ")
         salt.master_json_config = eval("\"" + mconf.gsub(/"/, '\"') + "\"")
       end
     end

@@ -43,7 +43,8 @@ RSpec.describe Salt::Factory do
       end
       it "fails when a host does not have a specified role" do
         f = Salt::Factory.new({"hosts" => {"foo" => {"ip" => "1.2.4.4"}}})
-        expect{f.create}.to raise_error(ArgumentError)
+        
+        expect{ f.create }.to raise_error(ArgumentError)
       end
     end
   end

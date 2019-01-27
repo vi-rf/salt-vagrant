@@ -4,10 +4,10 @@ require "byebug"
 RSpec.describe Salt::Host do
   before :each do
     @name = "myName"
-    @info = {"ip" => "199.199.199.199"}
-    @role_config = {"grains" => "tmp/myName"}
+    @info = {"ip" => "199.199.199.199", "grains" => "tmp/myName"}
+
     
-    @obj = Salt::Host.new(@name, @info, @role_config)
+    @obj = Salt::Host.new(@name, @info)
   end
   it "has a version number" do
     expect(Salt::VERSION).not_to be nil
@@ -16,9 +16,6 @@ RSpec.describe Salt::Host do
   describe "#new" do
     it "can create an object" do
       expect( @obj ).to be_kind_of(Salt::Host)
-    end
-    it "raises an error without an ip" do
-      expect{Salt::Host.new("foo", {})}.to raise_error(ArgumentError)
     end
   end
   
