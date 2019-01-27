@@ -16,11 +16,16 @@ RSpec.describe Salt::Config do
       expect(conf).to include({"foo" => "bar"})
     end
 
+    it "correctly merges lists of hashes" do
+      conf = Salt::Config.new({"foo" => "bar"}, {"biz" => "baz"}, {"foo" => "boo"})
+      expect(conf).to include({"foo" => "boo", "biz" => "baz"})
+    end
+    
     it "merges and correctly overwrites keys with lists of hashes" do
       conf = Salt::Config.new({"foo" => "bar"}, {"foo" => "biz"}, {"foo" => "baz"})
       expect(conf).to include({"foo" => "baz"})
     end
-      
+    
     it "supports mandatory keys" do
       conf = Salt::Config.new({"foo" => "bar"}, {"foo" => "biz"}, {"foo" => "baz"})
       expect(conf.has_keys?(["foo"])).to be true

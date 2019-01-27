@@ -1,0 +1,12 @@
+A list of changes for this set of classes
+
+1. redo the way configuration is managed.  There should be a mapping
+   class from what is specified in the structure to what the salt
+   config object needs.  Since the mapping is static, it should be
+   configuration, not code
+
+2. redo the salt bootstrapping configuration strings.  Right now they
+   are json; they should be templates that are instantiated with a
+   dictionary.
+
+

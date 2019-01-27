@@ -45,9 +45,15 @@ END
     
     describe "addMasterConfig" do    
       it "should read in a json doc" do
-        @obj.keypath = "."
-        expect(@salt).to receive(:master_json_config=).with("{ \"foo\": \"bar\" } ")
+        allow(File).to receive(:read).with("tmpfile").and_return(<<~HEREDOC)
+{ 
+ "foo": "bar"
+}
+HEREDOC
+        
+        expect(@salt).to receive(:master_json_config=).with("{  \"foo\": \"bar\" } ")
         @obj.addMasterConfig(@salt)
+        
       end
     end
     
