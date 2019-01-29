@@ -43,7 +43,7 @@ RSpec.describe Salt::Factory do
         expect(@hosts).to have_key('minion')
       end
       it "has a minion that knows its master" do
-        expect(@hosts['minion'].master).to eq(@hosts['master'])
+        expect(@hosts['minion']['master']).to eq(@hosts['master'])
       end
       
       it "has a master that knows its minions" do
@@ -94,7 +94,7 @@ RSpec.describe Salt::Factory do
       end
 
       it "has a minion that knows its master" do
-        expect(@hosts['minion'].master).to eq(@hosts['syndic'])
+        expect(@hosts['minion']['master']).to eq(@hosts['syndic'])
       end
       it "has a master that knows its minions" do
         expect(@hosts['master'].minionList).to eq({"syndic" => "keys/syndic.pub", "master" => "keys/master.pub"})

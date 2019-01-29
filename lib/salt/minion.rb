@@ -2,7 +2,7 @@ require 'salt/host'
 
 module Salt
   class Minion < Host
-    attr_accessor :master
+#    attr_accessor :master
     def pub_key
       @keypath + "/#{@name}.pub"
     end

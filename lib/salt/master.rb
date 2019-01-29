@@ -13,6 +13,7 @@ module Salt
     
     def registerMinion(minion)
       self['minions'][minion.name] = minion
+      minion['master'] = self
     end
 
     # create the hash of minion keys that the master should be seeded with
@@ -30,8 +31,8 @@ module Salt
     end
     
     def addMasterConfig(salt)
-      self['minions'].each do |m|
-        if m.is_a?(Salt::Syndic)
+      self['minions'].each do |n, v|
+        if v.is_a?(Salt::Syndic)
           self['master_config']['order_masters'] = true
           break
         end

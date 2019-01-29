@@ -4,7 +4,8 @@ RSpec.describe Salt::Syndic do
   before :each do
     @name = "myName"
     @info = {"ip" => "199.199.199.199",
-             "grains" => "tmp/myName"
+             "grains" => "tmp/myName",
+             'master' => 'master'
             }
     
     @obj = Salt::Syndic.new(@name, @info)
@@ -24,13 +25,25 @@ RSpec.describe Salt::Syndic do
       expect( @obj.role ).to eq('syndic')
     end
   end
+  context "registered to a master" do
+    before :each do
+      @salt = double
+      @master = Salt::Master.new('master', @info)
+      @master.registerMinion(@obj)
+    end
+    describe "#addMasterConfig" do
+      it "correctly adds the syndic_master key" do
+        expect(@salt).to receive(:master_json_config=).with("{\"syndic_master\":\"199.199.199.199\"}")
+        @obj.addMasterConfig(@salt)
+      end
+    end
+  
     describe "#setDefaults" do
       before :each do
-        @salt = double
         allow(@salt).to receive(:seed_master=)
         allow(@salt).to receive(:install_master=)
       end
-      
+    
       it "should set defaults" do
         allow(@salt).to receive(:colorize=)
         allow(@salt).to receive(:grains_config=) { "bob" }
@@ -38,10 +51,10 @@ RSpec.describe Salt::Syndic do
         allow(@salt).to receive(:minion_key=)
         allow(@salt).to receive(:master_json_config=)
         
-        expect(@salt).to receive(:install_syndic=)
+        expect(@salt).to receive(:install_syndic=).with(true)
         @obj.setDefaults(@salt)
       end
     end
-    
+  end
 end
 # Copyright (C) 2019 by Risk Focus Inc.  All rights reserved

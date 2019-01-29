@@ -29,8 +29,8 @@ module Salt
       
       # now that all objects are created, set their masters
       hostlist.each do |n, v|
-        v.master = hostlist[ v["master"] ]
-        hostlist[ v["master"] ].registerMinion(v)
+        # sets v['master'] to the object
+        hostlist[ v['master'] ].registerMinion(v)
       end
       
       return hostlist

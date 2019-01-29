@@ -57,7 +57,12 @@ RSpec.describe Salt::Master do
         
       end
       it "should add order_master for masters of syndics" do
+        @syndic  = Salt::Syndic.new('syndic', {"ip" => "199.199.199.100", "grains" => "tmp/myName", "master" => 'master'})
+        @obj.registerMinion(@syndic)
 
+        expect(@salt).to receive(:master_json_config=).with({"foo" => "bar", "order_masters" => true}.to_json)
+        @obj.addMasterConfig(@salt)
+        
       end
     end
     
