@@ -9,6 +9,3 @@ hosts:
     memory: 1536
     cpus: 2
     master: master
-    minions:
-      - minion1
-      - master
