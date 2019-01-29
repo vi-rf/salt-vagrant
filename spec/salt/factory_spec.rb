@@ -12,6 +12,7 @@ RSpec.describe Salt::Factory do
       expect(f).to be_kind_of(Salt::Factory)
     end
   end
+  
   describe "#create" do
     context "with no defaults" do
       before :each do
@@ -21,10 +22,6 @@ RSpec.describe Salt::Factory do
                                      "ip" => "1.2.3.4",
                                      "role" => "master",
                                      "master" => "master",
-                                     "minions" => [
-                                       "minion",
-                                       "master"
-                                     ]
                                    },
                                    "minion" => {
                                        "ip" => "1.2.3.5",
@@ -35,6 +32,7 @@ RSpec.describe Salt::Factory do
                                })
         @hosts = @f.create
       end
+
       it "can create a set of objects" do
         expect(@hosts.keys.length).to eql(2)
       end
@@ -47,6 +45,7 @@ RSpec.describe Salt::Factory do
       it "has a minion that knows its master" do
         expect(@hosts['minion'].master).to eq(@hosts['master'])
       end
+      
       it "has a master that knows its minions" do
         expect(@hosts['master'].minionList).to eq({"minion" => "keys/minion.pub", "master" => "keys/master.pub"})
       end
@@ -59,15 +58,13 @@ RSpec.describe Salt::Factory do
       end
     end
     context "with Syndic" do
-            before :each do
+      before :each do
         @f = Salt::Factory.new({
                                  "hosts" => {
                                    "master" => {
                                      "ip" => "1.2.3.4",
                                      "role" => "master",
-                                     "minions" => [
-                                       "syndic"
-                                     ]
+                                     "master" => "master"
                                    },
                                    "syndic" => {
                                      "ip" => "1.2.3.5",
@@ -100,7 +97,7 @@ RSpec.describe Salt::Factory do
         expect(@hosts['minion'].master).to eq(@hosts['syndic'])
       end
       it "has a master that knows its minions" do
-        expect(@hosts['master'].minionList).to eq({"syndic" => "keys/syndic.pub"})
+        expect(@hosts['master'].minionList).to eq({"syndic" => "keys/syndic.pub", "master" => "keys/master.pub"})
       end
 
       

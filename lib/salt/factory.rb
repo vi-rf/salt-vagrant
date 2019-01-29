@@ -14,7 +14,11 @@ module Salt
       hostlist = {}
       @info["hosts"].each do |n, v|
         # get the correct configuration:  defaults, hosts, object
-        conf = Salt::Config.new(@info["defaults"], (@info.has_key?("roles")? @info["roles"][ v["role"] ] : {}), v)
+        conf = Salt::Config.new(
+          @info["defaults"],
+          (@info.has_key?("roles")? @info["roles"][ v["role"] ] : {}),
+          v
+        )
         # each host must have a role and an ip
         if !conf.has_keys?(["role", "ip"])
           raise ArgumentError.new("\"#{n}\" must have a role and an ip")
@@ -25,8 +29,8 @@ module Salt
       
       # now that all objects are created, set their masters
       hostlist.each do |n, v|
-         v.master = hostlist[ v["master"] ]
-        
+        v.master = hostlist[ v["master"] ]
+        hostlist[ v["master"] ].registerMinion(v)
       end
       
       return hostlist

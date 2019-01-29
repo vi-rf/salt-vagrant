@@ -3,10 +3,11 @@ require 'salt/master'
 RSpec.describe Salt::Master do
   before :each do
     @name = "myName"
-    @info = {"ip" => "199.199.199.199",
-             "minions" => ['minion1', 'minion2', 'minion3'],
-              "master_config" => "tmpfile"
-            }
+    @info = {
+      "ip" => "199.199.199.199",
+      "master_config" => {"foo" => "bar"},
+      "role" => 'master'
+    }
     
     @obj = Salt::Master.new(@name, @info)
   end
@@ -26,34 +27,37 @@ RSpec.describe Salt::Master do
     end
   end
 
-  describe "#minionList" do
-    it "should return the list of minion keys" do
-      @obj.keypath = "tmp"
-      expect(@obj.minionList).to match_array @info['minions'].map {|m| [m, "tmp/#{m}.pub"] }
+  context "with minion" do
+    before :each do
+      @min = Salt::Minion.new('minion', {"ip" => "199.199.199.100", "grains" => "tmp/myName", "master" => 'master'})
+    end
+    
+    describe "#registerMinion" do
+      it "should know its minions" do
+        expect{@obj.registerMinion(@min)}.not_to raise_error
+      end
+    end
+    describe "#minionList" do
+      it "should return the list of minion keys" do
+        @obj.registerMinion(@min)
+        expect(@obj.minionList).to include('minion' => 'keys/minion.pub')
+      end
     end
   end
-
+  
   context "defaults" do
     before :each do
-      allow(File).to receive(:read).and_return(<<END)
-{
-   "foo": "bar"
-}
-END
       @salt = double
     end
     
     describe "addMasterConfig" do    
       it "should read in a json doc" do
-        allow(File).to receive(:read).with("tmpfile").and_return(<<~HEREDOC)
-{ 
- "foo": "bar"
-}
-HEREDOC
-        
-        expect(@salt).to receive(:master_json_config=).with("{  \"foo\": \"bar\" } ")
+        expect(@salt).to receive(:master_json_config=).with("{\"foo\":\"bar\"}")
         @obj.addMasterConfig(@salt)
         
+      end
+      it "should add order_master for masters of syndics" do
+
       end
     end
     
@@ -69,7 +73,7 @@ HEREDOC
         allow(@salt).to receive(:minion_pub=)
         allow(@salt).to receive(:minion_key=)
         
-        expect(@salt).to receive(:master_json_config=).with("{ \"foo\": \"bar\" } ")
+        expect(@salt).to receive(:master_json_config=).with("{\"foo\":\"bar\"}")
         @obj.setDefaults(@salt)
       end
     end
