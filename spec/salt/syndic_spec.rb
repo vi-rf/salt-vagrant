@@ -50,6 +50,7 @@ RSpec.describe Salt::Syndic do
         allow(@salt).to receive(:minion_pub=)
         allow(@salt).to receive(:minion_key=)
         allow(@salt).to receive(:master_json_config=)
+        allow(@salt).to receive(:minion_json_config=)
         
         expect(@salt).to receive(:install_syndic=).with(true)
         @obj.setDefaults(@salt)

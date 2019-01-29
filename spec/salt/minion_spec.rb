@@ -3,7 +3,7 @@ require 'salt/minion'
 RSpec.describe Salt::Minion do
   before :each do
     @name = "myName"
-    @info = {"ip" => "199.199.199.199", "grains" => "tmp/myName", "master" => 'master'}
+    @info = {"ip" => "199.199.199.199", "grains" => "tmp/myName"} #, "master" => 'master'}
     
     @obj = Salt::Minion.new(@name, @info)
   end
@@ -70,6 +70,7 @@ RSpec.describe Salt::Minion do
       allow(@salt).to receive(:minion_key=)
     end
     it "should set defaults" do
+      expect(@salt).to receive(:minion_json_config=).with("{\"id\":\"myName\"}")
       @obj.setDefaults(@salt)
     end
   end  
