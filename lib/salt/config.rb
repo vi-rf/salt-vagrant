@@ -9,14 +9,7 @@ module Salt
     end
 
     def has_keys?(mandatory_keys)
-      # this should be a one-liner with map or each
-      mandatory_keys.each do |k|
-        if !self.has_key?(k)
-          return false
-        end
-      end
-      
-      return true
+      mandatory_keys.all? { |k| self.include?(k) }
     end
     
   end
